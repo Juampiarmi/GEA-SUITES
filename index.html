@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>GEA SUITES — Alojamiento para Parejas 24hs | San Miguel de Tucumán</title>
+<meta name="description" content="GEA SUITES: alojamiento premium para parejas, abierto 24hs los 365 días del año en Asunción 345, San Miguel de Tucumán. Ingreso discreto, cocheras privadas, jacuzzi y Smart TV.">
+<meta name="theme-color" content="#141113">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;0,800;0,900;1,500;1,600&family=Playfair+Display:ital,wght@1,500;1,600;1,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS (CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<style>
+  html { scroll-behavior: smooth; }
+
+  /* =========================================================
+     DESIGN TOKENS — Identidad definitiva GEA SUITES
+     (cálida, íntima, penumbra ámbar — extraída del feed real)
+  ========================================================= */
+  :root {
+    --bg: #0A090B;
+    --bg-alt: #141215;
+    --bg-alt-rgb: 20,18,21;
+    --surface: rgba(30,25,29,0.92);
+    --border: rgba(255,255,255,0.08);
+
+    --text-heading: #F8F6F4;
+    --text-secondary: #C7BEB5;
+
+    --accent: #DFA15A;
+    --accent-rgb: 223,161,90;
+    --accent-hover: #C98A42;
+    --accent-hover-rgb: 201,138,66;
+
+    --accent-2: #3D1B28;      /* borravino — uso decorativo (badges, resplandor) */
+    --accent-2-rgb: 61,27,40;
+
+    --font-heading: 'Fraunces', serif;
+    --font-body: 'Inter', sans-serif;
+    --heading-tracking: 0.02em;
+    --heading-weight: 700;
+
+    --radius-card: 1.25rem;
+    --radius-btn: 0.875rem;
+    --backdrop-blur: 12px;
+
+    --glow: 0 0 20px rgba(var(--accent-rgb), 0.35);
+    --glow-text: 0 0 18px rgba(var(--accent-rgb), 0.35);
+  }
+
+  /* =========================================================
+     BASE
+  ========================================================= */
+  body {
+    background-color: var(--bg);
+    color: var(--text-secondary);
+    font-family: var(--font-body);
+  }
+
+  main, footer { position: relative; z-index: 1; }
+
+  ::selection { background: rgba(var(--accent-rgb), 0.3); color: var(--text-heading); }
+
+  /* =========================================================
+     ATMÓSFERA — luces volumétricas animadas, CSS puro
+  ========================================================= */
+  .atmosphere {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .atmosphere .blob {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(140px);
+    will-change: transform;
+  }
+  .blob-1 {
+    width: 65vw; height: 65vw; max-width: 760px; max-height: 760px;
+    top: -20%; left: -15%;
+    background: rgba(218, 165, 90, 0.07);
+    animation: drift1 30s ease-in-out infinite alternate;
+  }
+  .blob-2 {
+    width: 55vw; height: 55vw; max-width: 640px; max-height: 640px;
+    bottom: -22%; right: -15%;
+    background: rgba(60, 20, 35, 0.12);
+    animation: drift2 34s ease-in-out infinite alternate;
+  }
+  @keyframes drift1 { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(7%,9%) scale(1.15); } }
+  @keyframes drift2 { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(-8%,-8%) scale(0.92); } }
+  @media (prefers-reduced-motion: reduce) {
+    .atmosphere .blob { animation: none; }
+  }
+
+  h1, h2, h3 {
+    color: var(--text-heading);
+    font-family: var(--font-heading);
+    font-weight: var(--heading-weight);
+    letter-spacing: var(--heading-tracking);
+  }
+
+  .brand-font {
+    font-family: var(--font-heading);
+    font-weight: var(--heading-weight);
+  }
+
+  .txt-heading { color: var(--text-heading); }
+  .txt-secondary { color: var(--text-secondary); }
+  .txt-accent { color: var(--accent); }
+
+  /* Claim editorial del Hero: serif itálica dedicada, independiente del heading general */
+  .claim-serif {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+
+  /* Divisor sutil bajo los títulos de sección */
+  .section-divider {
+    width: 3rem;
+    height: 1px;
+    margin: 1rem auto 0;
+    background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb),0.5), transparent);
+  }
+
+  .card-surface {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    backdrop-filter: blur(var(--backdrop-blur));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur));
+    transition: transform .45s cubic-bezier(.16,1,.3,1), border-color .4s ease, box-shadow .4s ease;
+  }
+  .card-surface:hover {
+    transform: translateY(-4px);
+    border-color: rgba(var(--accent-rgb), 0.35);
+    box-shadow: 0 24px 45px -18px rgba(0,0,0,0.55), 0 0 30px rgba(var(--accent-rgb),0.08);
+  }
+  /* Iluminación cenital: hairline degradado en el borde superior */
+  .card-surface::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 8%; right: 8%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    pointer-events: none;
+  }
+  /* Brillo especular al pasar el cursor */
+  .card-surface::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 35%);
+    opacity: 0;
+    transition: opacity .45s ease;
+    pointer-events: none;
+  }
+  .card-surface:hover::after { opacity: 1; }
+  .surface-fill { background: var(--surface); border: 1px solid var(--border); }
+  .pill-surface { background: var(--surface); border: 1px solid var(--border); }
+  .frame-app { border: 1px solid var(--border); border-radius: var(--radius-card); overflow: hidden; }
+  .section-alt { background: rgba(var(--bg-alt-rgb), 0.5); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .site-header { background: rgba(var(--bg-alt-rgb), 0.88); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+
+  .btn-neon {
+    background: linear-gradient(135deg, var(--accent) 0%, rgba(var(--accent-rgb),0.72) 100%);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: var(--bg);
+    box-shadow: var(--glow);
+    transition: transform .3s cubic-bezier(.16,1,.3,1), box-shadow .3s ease, background .3s ease;
+  }
+  .btn-neon i { color: var(--bg); }
+  .btn-neon:hover { background: linear-gradient(135deg, var(--accent-hover) 0%, rgba(var(--accent-hover-rgb),0.8) 100%); transform: translateY(-2px); box-shadow: var(--glow-text), var(--glow); }
+  .btn-neon:active { transform: scale(0.98); }
+  .btn-radius { border-radius: var(--radius-btn); }
+
+  .btn-outline {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-btn);
+    color: var(--text-heading);
+    backdrop-filter: blur(var(--backdrop-blur));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur));
+    transition: border-color .3s ease, transform .3s cubic-bezier(.16,1,.3,1);
+  }
+  .btn-outline:hover { border-color: rgba(var(--accent-rgb), 0.5); transform: translateY(-2px); }
+  .btn-outline:active { transform: scale(0.98); }
+
+  .price-display { color: var(--text-heading); }
+
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55); }
+    70% { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
+  }
+  .pulse-dot { animation: pulse-dot 2s infinite; }
+
+  @keyframes pulse-fab {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb),0.5), var(--glow); }
+    70% { box-shadow: 0 0 0 14px rgba(var(--accent-rgb),0), var(--glow); }
+  }
+  .pulse-fab { animation: pulse-fab 2.2s infinite; }
+
+  .hour-btn {
+    transition: all .18s ease;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-btn);
+    color: var(--text-secondary);
+    background: transparent;
+  }
+  .hour-btn[data-active="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+    box-shadow: var(--glow);
+  }
+
+  .faq-chevron { transition: transform .25s ease; }
+  .faq-panel { transition: max-height .3s ease, opacity .25s ease; overflow: hidden; }
+
+  .amenity-pill {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+  }
+
+  .premium-badge {
+    background: linear-gradient(90deg, rgba(var(--accent-2-rgb),0.55), rgba(var(--accent-2-rgb),0.15));
+    border: 1px solid rgba(var(--accent-rgb),0.4);
+  }
+
+  input[type="checkbox"].neon-check {
+    appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  input[type="checkbox"].neon-check:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: var(--glow);
+  }
+  input[type="checkbox"].neon-check:checked::after {
+    content: '';
+    position: absolute;
+    left: 6px; top: 2px;
+    width: 5px; height: 10px;
+    border: solid var(--bg);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  /* =========================================================
+     FILM GRAIN — textura cinematográfica sobre toda la página
+  ========================================================= */
+  .film-grain {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+</head>
+
+<body class="antialiased">
+
+<div class="atmosphere">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+</div>
+<div class="film-grain"></div>
+
+<!-- ======================= HEADER ======================= -->
+<header class="site-header fixed top-0 left-0 right-0 z-40">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+    <!-- Logo -->
+    <a href="#top">
+      <img src="logo.png" alt="GEA SUITES" class="h-8 md:h-10 w-auto object-contain">
+    </a>
+
+    <!-- Right actions -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <div class="hidden sm:flex pill-surface items-center gap-2 rounded-full px-3 py-1.5">
+        <span class="w-2 h-2 rounded-full bg-green-400 pulse-dot"></span>
+        <span class="txt-secondary text-xs font-medium tracking-wide">Abierto 24hs</span>
+      </div>
+      <a id="header-ig-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram GEA Suites"
+         class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full surface-fill active:scale-95 transition txt-heading">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+          <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+          <circle cx="12" cy="12" r="4"></circle>
+          <circle cx="17.3" cy="6.7" r="0.9" fill="currentColor" stroke="none"></circle>
+        </svg>
+      </a>
+      <a id="header-wa-btn" href="#" target="_blank" rel="noopener" aria-label="WhatsApp GEA Suites"
+         class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full btn-neon active:scale-95 transition">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+          <path d="M4 12a8 8 0 1 1 3.2 6.4L4 20l1.2-3.4A7.96 7.96 0 0 1 4 12Z"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="top" class="pt-16 md:pt-20">
+
+  <!-- ======================= HERO ======================= -->
+  <section class="relative px-5 py-16 md:py-24 overflow-hidden">
+
+    <div class="relative max-w-3xl mx-auto text-center">
+
+      <img src="logo.png" alt="GEA SUITES" class="h-12 md:h-16 w-auto mx-auto object-contain mb-6">
+
+      <h1 class="brand-font txt-heading text-4xl md:text-6xl leading-[1.05]">
+        Tu momento. Tu lugar.
+      </h1>
+
+      <p class="txt-accent text-sm sm:text-base font-medium mt-4">
+        Suites privadas para parejas 24hs · San Miguel de Tucumán
+      </p>
+
+      <p class="claim-serif txt-secondary text-base sm:text-lg mt-3" style="opacity:0.85;">
+        «Lo que pasa acá, se queda acá.»
+      </p>
+
+      <div class="mt-8 flex flex-col sm:flex-row items-stretch justify-center gap-3">
+        <a href="#habitaciones"
+           class="btn-neon btn-radius font-semibold px-6 py-4 text-center active:scale-95 transition">
+          Ver Habitaciones &amp; Tarifas
+        </a>
+        <a id="hero-wa-btn" href="#" target="_blank" rel="noopener"
+           class="btn-outline flex items-center justify-center gap-2 font-semibold px-6 py-4 active:scale-95 transition">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 txt-accent">
+            <path d="M4 12a8 8 0 1 1 3.2 6.4L4 20l1.2-3.4A7.96 7.96 0 0 1 4 12Z"></path>
+          </svg>
+          Consultar Disponibilidad
+        </a>
+      </div>
+
+      <!-- Tira de badges -->
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-2.5">
+        <span class="bg-white/[0.04] border border-white/10 text-xs px-4 py-2 rounded-full txt-secondary flex items-center gap-2">
+          <i data-lucide="footprints" class="w-4 h-4 txt-accent"></i> Ingreso Peatonal
+        </span>
+        <span class="bg-white/[0.04] border border-white/10 text-xs px-4 py-2 rounded-full txt-secondary flex items-center gap-2">
+          <i data-lucide="bike" class="w-4 h-4 txt-accent"></i> Motos Gratis
+        </span>
+        <span class="bg-white/[0.04] border border-white/10 text-xs px-4 py-2 rounded-full txt-secondary flex items-center gap-2">
+          <i data-lucide="car" class="w-4 h-4 txt-accent"></i> Cocheras Privadas
+        </span>
+        <span class="bg-white/[0.04] border border-white/10 text-xs px-4 py-2 rounded-full txt-secondary flex items-center gap-2">
+          <i data-lucide="sparkles" class="w-4 h-4 txt-accent"></i> 24hs los 365 días
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= HABITACIONES ======================= -->
+  <section id="habitaciones" class="section-alt px-5 py-14">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center max-w-xl mx-auto mb-10">
+        <p class="txt-accent text-xs tracking-[0.3em] uppercase font-semibold mb-2">Catálogo</p>
+        <h2 class="text-2xl sm:text-3xl">Habitaciones y Tarifas</h2>
+        <div class="section-divider"></div>
+        <p class="txt-secondary text-sm mt-3">
+          Turno base de 2 hs. Hora adicional al 50% del valor del turno. Exclusivo para 2 personas.
+        </p>
+      </div>
+
+      <div id="rooms-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    </div>
+  </section>
+
+  <!-- ======================= ROOM SERVICE ======================= -->
+  <section id="carta" class="px-5 py-14">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center max-w-xl mx-auto mb-10">
+        <p class="txt-accent text-xs tracking-[0.3em] uppercase font-semibold mb-2">Room Service 24hs</p>
+        <h2 class="text-2xl sm:text-3xl">Carta &amp; Bar</h2>
+        <div class="section-divider"></div>
+        <p class="txt-secondary text-sm mt-3">
+          Entrega discreta y anónima a través de pasaplatos ciego, disponible las 24 horas.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div class="card-surface p-5">
+          <div class="flex items-center gap-2 mb-4">
+            <i data-lucide="coffee" class="w-5 h-5 txt-accent"></i>
+            <h3 class="text-sm">Cafetería</h3>
+          </div>
+          <ul class="space-y-2 text-sm txt-secondary">
+            <li class="flex gap-2"><span class="txt-accent">•</span> Servicio de cafetería caliente disponible las 24 hs</li>
+          </ul>
+        </div>
+
+        <div class="card-surface p-5">
+          <div class="flex items-center gap-2 mb-4">
+            <i data-lucide="sandwich" class="w-5 h-5 txt-accent"></i>
+            <h3 class="text-sm">Comidas &amp; Snacks</h3>
+          </div>
+          <ul class="space-y-2 text-sm txt-secondary">
+            <li class="flex gap-2"><span class="txt-accent">•</span> Sanguchitos de jamón y queso</li>
+            <li class="flex gap-2"><span class="txt-accent">•</span> Sanguchitos de ternera y queso</li>
+            <li class="flex gap-2"><span class="txt-accent">•</span> Snacks salados variados</li>
+          </ul>
+        </div>
+
+        <div class="card-surface p-5">
+          <div class="flex items-center gap-2 mb-4">
+            <i data-lucide="martini" class="w-5 h-5 txt-accent"></i>
+            <h3 class="text-sm">Bebidas &amp; Coctelería</h3>
+          </div>
+          <ul class="space-y-2 text-sm txt-secondary">
+            <li class="flex gap-2"><span class="txt-accent">•</span> Tragos y coctelería</li>
+            <li class="flex gap-2"><span class="txt-accent">•</span> Bebidas con alcohol (cervezas, vinos, espumantes)</li>
+            <li class="flex gap-2"><span class="txt-accent">•</span> Bebidas sin alcohol (gaseosas, aguas)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= ACCESOS ======================= -->
+  <section id="accesos" class="section-alt px-5 py-14">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center max-w-xl mx-auto mb-10">
+        <p class="txt-accent text-xs tracking-[0.3em] uppercase font-semibold mb-2">Discreción</p>
+        <h2 class="text-2xl sm:text-3xl">Accesos</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div class="card-surface p-5 text-center">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3" style="background:rgba(var(--accent-rgb),0.12);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" class="w-5 h-5 txt-accent">
+              <ellipse cx="8" cy="7" rx="2.5" ry="3.5"></ellipse>
+              <ellipse cx="16" cy="15" rx="2.5" ry="3.5"></ellipse>
+              <line x1="8" y1="11" x2="8" y2="13"></line>
+              <line x1="16" y1="19" x2="16" y2="21"></line>
+            </svg>
+          </div>
+          <h3 class="text-sm mb-1.5">Acceso Peatonal</h3>
+          <p class="txt-secondary text-xs leading-relaxed">Ingreso habilitado caminando, con total discreción y anonimato.</p>
+        </div>
+        <div class="card-surface p-5 text-center">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3" style="background:rgba(var(--accent-rgb),0.12);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 txt-accent">
+              <circle cx="6" cy="17" r="3.5"></circle>
+              <circle cx="18" cy="17" r="3.5"></circle>
+              <path d="M6 17 L10 9 L15 9 L18 17"></path>
+              <path d="M10 9 L13 13 L18 17"></path>
+              <line x1="8" y1="9" x2="12" y2="9"></line>
+            </svg>
+          </div>
+          <h3 class="text-sm mb-1.5">Estacionamiento de Motos</h3>
+          <p class="txt-secondary text-xs leading-relaxed">Espacio techado exclusivo, 100% sin cargo.</p>
+        </div>
+        <div class="card-surface p-5 text-center">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3" style="background:rgba(var(--accent-rgb),0.12);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 txt-accent">
+              <path d="M4 16 L5.5 10 Q6 9 7 9 L17 9 Q18 9 18.5 10 L20 16"></path>
+              <rect x="3" y="16" width="18" height="3.5" rx="1.5"></rect>
+              <circle cx="7.5" cy="19.5" r="1.6"></circle>
+              <circle cx="16.5" cy="19.5" r="1.6"></circle>
+            </svg>
+          </div>
+          <h3 class="text-sm mb-1.5">Cocheras de Autos</h3>
+          <p class="txt-secondary text-xs leading-relaxed">Privadas individuales con acceso directo a la habitación (Nivel 3 y 4) o cochera en galería techada (Nivel 1 y 2).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= FAQ ======================= -->
+  <section id="faq" class="px-5 py-14">
+    <div class="max-w-3xl mx-auto">
+      <div class="text-center mb-10">
+        <p class="txt-accent text-xs tracking-[0.3em] uppercase font-semibold mb-2">Dudas frecuentes</p>
+        <h2 class="text-2xl sm:text-3xl">Preguntas Frecuentes</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div id="faq-accordion" class="space-y-3"></div>
+    </div>
+  </section>
+
+  <!-- ======================= UBICACIÓN & CONTACTO ======================= -->
+  <section id="ubicacion" class="section-alt px-5 py-14">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center max-w-xl mx-auto mb-10">
+        <p class="txt-accent text-xs tracking-[0.3em] uppercase font-semibold mb-2">Encontranos</p>
+        <h2 class="text-2xl sm:text-3xl">Ubicación &amp; Contacto</h2>
+        <div class="section-divider"></div>
+        <p class="txt-secondary text-sm mt-3 flex items-center justify-center gap-1.5">
+          <i data-lucide="map-pin" class="w-4 h-4 txt-accent"></i>
+          Asunción 345, San Miguel de Tucumán
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
+        <div class="frame-app h-64 lg:h-full min-h-[220px]">
+          <iframe
+            src="https://www.google.com/maps?q=Asunci%C3%B3n%20345%2C%20San%20Miguel%20de%20Tucum%C3%A1n&output=embed"
+            class="w-full h-full grayscale invert-[92%] contrast-[90%]"
+            style="border:0;"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Mapa GEA Suites"></iframe>
+        </div>
+
+        <div class="card-surface p-6 flex flex-col justify-between gap-6">
+          <div>
+            <h3 class="text-lg mb-2">GEA SUITES</h3>
+            <p class="text-sm txt-secondary leading-relaxed">
+              Asunción 345, San Miguel de Tucumán, Tucumán.<br>
+              Atención exclusivamente por orden de llegada, sin reservas previas.
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-3">
+            <a id="maps-btn" href="#" target="_blank" rel="noopener"
+               class="btn-outline flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-semibold active:scale-95 transition">
+              <i data-lucide="map" class="w-4 h-4 txt-accent"></i> Abrir en Google Maps
+            </a>
+            <a id="contact-ig-btn" href="#" target="_blank" rel="noopener"
+               class="btn-outline flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-semibold active:scale-95 transition">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 txt-accent">
+                <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+                <circle cx="12" cy="12" r="4"></circle>
+                <circle cx="17.3" cy="6.7" r="0.9" fill="currentColor" stroke="none"></circle>
+              </svg> Seguinos en Instagram
+            </a>
+            <a id="footer-wa-btn" href="#" target="_blank" rel="noopener"
+               class="btn-neon btn-radius flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-semibold active:scale-95 transition">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                <path d="M4 12a8 8 0 1 1 3.2 6.4L4 20l1.2-3.4A7.96 7.96 0 0 1 4 12Z"></path>
+              </svg> Consultar por WhatsApp
+            </a>
+          </div>
+
+          <div>
+            <p class="text-[11px] tracking-widest uppercase txt-secondary mb-2">Medios de pago</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="amenity-pill rounded-full px-3 py-1.5 text-xs flex items-center gap-1.5 txt-secondary"><i data-lucide="banknote" class="w-3.5 h-3.5 txt-accent"></i>Efectivo</span>
+              <span class="amenity-pill rounded-full px-3 py-1.5 text-xs flex items-center gap-1.5 txt-secondary"><i data-lucide="credit-card" class="w-3.5 h-3.5 txt-accent"></i>Débito</span>
+              <span class="amenity-pill rounded-full px-3 py-1.5 text-xs flex items-center gap-1.5 txt-secondary"><i data-lucide="credit-card" class="w-3.5 h-3.5 txt-accent"></i>Crédito</span>
+              <span class="amenity-pill rounded-full px-3 py-1.5 text-xs flex items-center gap-1.5 txt-secondary"><i data-lucide="qr-code" class="w-3.5 h-3.5 txt-accent"></i>Transferencia/QR</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ======================= FOOTER ======================= -->
+<footer class="px-5 py-8 text-center">
+  <div class="mb-4">
+    <img src="logo.png" alt="GEA SUITES" class="h-10 w-auto object-contain mx-auto">
+  </div>
+  <div class="flex items-center justify-center gap-3 mb-4">
+    <a id="footer-ig-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram GEA Suites"
+       class="flex items-center justify-center w-9 h-9 rounded-full surface-fill active:scale-95 transition txt-heading">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+        <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+        <circle cx="12" cy="12" r="4"></circle>
+        <circle cx="17.3" cy="6.7" r="0.9" fill="currentColor" stroke="none"></circle>
+      </svg>
+    </a>
+  </div>
+  <p class="text-xs txt-secondary">Asunción 345, San Miguel de Tucumán · Abierto 24hs · Los 365 días del año</p>
+  <p class="text-[11px] txt-secondary mt-3" style="opacity:0.7;">© <span id="year"></span> GEA Suites. Todos los derechos reservados. Exclusivo para mayores de 18 años.</p>
+</footer>
+
+<!-- ======================= WHATSAPP FLOTANTE ======================= -->
+<a id="fab-wa-btn" href="#" target="_blank" rel="noopener" aria-label="Consultar por WhatsApp"
+   class="fixed bottom-5 right-5 z-50 w-14 h-14 rounded-full btn-neon pulse-fab flex items-center justify-center">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+    <path d="M4 12a8 8 0 1 1 3.2 6.4L4 20l1.2-3.4A7.96 7.96 0 0 1 4 12Z"></path>
+  </svg>
+</a>
+
+<script>
+  /* =========================================================
+     CONFIGURACIÓN
+  ========================================================= */
+  const WHATSAPP_NUMBER = "XXXXXXXXXXX"; // Reemplazar por el número real con código de país+área, ej: 5493811234567
+  const INSTAGRAM_URL = "https://instagram.com/geasuites"; // Reemplazar por el usuario real de Instagram
+  const HOTEL_ADDRESS = "Asunción 345, San Miguel de Tucumán";
+
+  function buildWaLink(message) {
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  }
+
+  function formatARS(value) {
+    return "$" + Math.round(value).toLocaleString("es-AR");
+  }
+
+  /* Iconos inline (sin dependencia de red) reutilizados en templates JS */
+  const ICON_WHATSAPP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M4 12a8 8 0 1 1 3.2 6.4L4 20l1.2-3.4A7.96 7.96 0 0 1 4 12Z"></path></svg>';
+  const ICON_SPARKLES = '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none" class="w-3 h-3"><path d="M12 2 L13.8 9.2 L21 11 L13.8 12.8 L12 20 L10.2 12.8 L3 11 L10.2 9.2 Z"></path></svg>';
+
+  /* =========================================================
+     DATA: HABITACIONES
+  ========================================================= */
+  const ROOMS = [
+    {
+      id: "n1",
+      name: "Nivel 1",
+      premium: false,
+      base: 18000,
+      extra: 9000,
+      hasGarageToggle: true,
+      amenities: [
+        { icon: "ban", label: "Sin cochera propia" },
+        { icon: "circle-slash", label: "Sin jacuzzi" },
+        { icon: "thermometer-snowflake", label: "Climatización" },
+        { icon: "tv", label: "Smart TV" },
+        { icon: "eye-off", label: "Privacidad total" },
+      ],
+    },
+    {
+      id: "n2",
+      name: "Nivel 2",
+      premium: false,
+      base: 20000,
+      extra: 10000,
+      hasGarageToggle: true,
+      amenities: [
+        { icon: "ban", label: "Sin cochera propia" },
+        { icon: "waves", label: "Con Jacuzzi" },
+        { icon: "thermometer-snowflake", label: "Climatización" },
+        { icon: "tv", label: "Smart TV" },
+        { icon: "lightbulb", label: "Iluminación ambiental" },
+      ],
+    },
+    {
+      id: "n3e",
+      name: "Nivel 3 Estándar",
+      premium: false,
+      base: 22000,
+      extra: 11000,
+      hasGarageToggle: false,
+      amenities: [
+        { icon: "car-front", label: "Cochera privada" },
+        { icon: "armchair", label: "Sillón Tántrico" },
+        { icon: "circle-slash", label: "Sin jacuzzi" },
+      ],
+    },
+    {
+      id: "n3p",
+      name: "Nivel 3 Premium",
+      premium: true,
+      base: 24000,
+      extra: 12000,
+      hasGarageToggle: false,
+      amenities: [
+        { icon: "car-front", label: "Cochera privada" },
+        { icon: "armchair", label: "Sillón Tántrico" },
+        { icon: "sparkles", label: "Espacio renovado" },
+        { icon: "tv", label: "Smart TV" },
+        { icon: "thermometer-sun", label: "Frío / Calor" },
+      ],
+    },
+    {
+      id: "n4e",
+      name: "Nivel 4 Estándar",
+      premium: false,
+      base: 24000,
+      extra: 12000,
+      hasGarageToggle: false,
+      amenities: [
+        { icon: "car-front", label: "Cochera privada" },
+        { icon: "armchair", label: "Sillón Tántrico" },
+        { icon: "waves", label: "Con Jacuzzi" },
+      ],
+    },
+    {
+      id: "n4p",
+      name: "Nivel 4 Premium",
+      premium: true,
+      base: 26000,
+      extra: 13000,
+      hasGarageToggle: false,
+      amenities: [
+        { icon: "car-front", label: "Cochera privada" },
+        { icon: "armchair", label: "Sillón Tántrico" },
+        { icon: "waves", label: "Con Jacuzzi" },
+        { icon: "sparkles", label: "Renovada a nuevo" },
+        { icon: "tv", label: "Smart TV" },
+        { icon: "thermometer-sun", label: "Frío / Calor" },
+      ],
+    },
+  ];
+
+  const HOUR_MULTIPLIER = { 2: 1, 3: 1.5, 4: 2 };
+  const GARAGE_EXTRA = 4000;
+
+  /* =========================================================
+     RENDER: CARDS DE HABITACIONES
+  ========================================================= */
+  function renderRoomCard(room) {
+    const amenitiesHTML = room.amenities
+      .map(
+        (a) => `
+      <span class="amenity-pill rounded-full px-2.5 py-1 text-[11px] flex items-center gap-1.5 txt-secondary">
+        <i data-lucide="${a.icon}" class="w-3.5 h-3.5 txt-accent"></i>${a.label}
+      </span>`
+      )
+      .join("");
+
+    const garageToggleHTML = room.hasGarageToggle
+      ? `
+      <label class="flex items-center gap-2.5 mt-4 cursor-pointer select-none">
+        <input type="checkbox" class="neon-check garage-check" data-room="${room.id}">
+        <span class="text-xs txt-secondary">Sumar cochera en galería <span class="txt-heading">(+${formatARS(GARAGE_EXTRA)})</span></span>
+      </label>`
+      : "";
+
+    const premiumBadge = room.premium
+      ? `<span class="premium-badge text-[10px] tracking-wide uppercase font-semibold txt-accent rounded-full px-2.5 py-1 flex items-center gap-1">
+           ${ICON_SPARKLES} Remodelada a Nueva
+         </span>`
+      : "";
+
+    return `
+    <article class="room-card card-surface p-5 flex flex-col" data-room="${room.id}"
+      data-base="${room.base}" data-extra="${room.extra}" data-hours="2">
+      <div class="flex items-start justify-between gap-2 mb-3">
+        <h3 class="text-lg">${room.name}</h3>
+      </div>
+      ${premiumBadge ? `<div class="mb-3">${premiumBadge}</div>` : ""}
+
+      <div class="flex flex-wrap gap-1.5 mb-4">${amenitiesHTML}</div>
+
+      <div class="mt-auto">
+        <div class="flex items-center gap-2 mb-3">
+          <button type="button" class="hour-btn flex-1 text-xs font-semibold py-2" data-hours="2" data-active="true">2 hs</button>
+          <button type="button" class="hour-btn flex-1 text-xs font-semibold py-2" data-hours="3" data-active="false">3 hs <span class="opacity-70">+50%</span></button>
+          <button type="button" class="hour-btn flex-1 text-xs font-semibold py-2" data-hours="4" data-active="false">4 hs <span class="opacity-70">+100%</span></button>
+        </div>
+
+        ${garageToggleHTML}
+
+        <div class="flex items-end justify-between mt-4 mb-4 pt-4" style="border-top:1px solid var(--border);">
+          <div>
+            <p class="text-[11px] txt-secondary">Total estadía</p>
+            <p class="price-display brand-font text-2xl">${formatARS(room.base)}</p>
+            <p class="text-[11px] txt-secondary mt-0.5">Hora extra: ${formatARS(room.extra)}</p>
+          </div>
+        </div>
+
+        <a href="#" target="_blank" rel="noopener"
+           class="wa-room-btn btn-neon btn-radius w-full flex items-center justify-center gap-2 font-semibold py-3 text-sm active:scale-95 transition">
+          ${ICON_WHATSAPP} Consultar Disponibilidad
+        </a>
+      </div>
+    </article>`;
+  }
+
+  function computeTotal(card) {
+    const base = parseFloat(card.dataset.base);
+    const hours = parseInt(card.dataset.hours, 10);
+    const garageCheck = card.querySelector(".garage-check");
+    const garageOn = garageCheck ? garageCheck.checked : false;
+    const subtotal = base * HOUR_MULTIPLIER[hours];
+    return subtotal + (garageOn ? GARAGE_EXTRA : 0);
+  }
+
+  function updateCard(card) {
+    const roomName = card.querySelector("h3").textContent.trim();
+    const hours = card.dataset.hours;
+    const garageCheck = card.querySelector(".garage-check");
+    const garageOn = garageCheck ? garageCheck.checked : false;
+    const total = computeTotal(card);
+
+    card.querySelector(".price-display").textContent = formatARS(total);
+
+    let message = `Hola! Quiero consultar disponibilidad en GEA Suites.\n\nHabitación: ${roomName}\nEstadía: ${hours} hs${garageOn ? "\nCon cochera en galería" : ""}\nTotal estimado: ${formatARS(total)}`;
+    const waBtn = card.querySelector(".wa-room-btn");
+    waBtn.href = buildWaLink(message);
+  }
+
+  function initRooms() {
+    const grid = document.getElementById("rooms-grid");
+    grid.innerHTML = ROOMS.map(renderRoomCard).join("");
+
+    grid.querySelectorAll(".room-card").forEach((card) => updateCard(card));
+
+    grid.addEventListener("click", (e) => {
+      const hourBtn = e.target.closest(".hour-btn");
+      if (hourBtn) {
+        const card = hourBtn.closest(".room-card");
+        card.querySelectorAll(".hour-btn").forEach((b) => (b.dataset.active = "false"));
+        hourBtn.dataset.active = "true";
+        card.dataset.hours = hourBtn.dataset.hours;
+        updateCard(card);
+      }
+    });
+
+    grid.addEventListener("change", (e) => {
+      if (e.target.classList.contains("garage-check")) {
+        const card = e.target.closest(".room-card");
+        updateCard(card);
+      }
+    });
+
+    if (window.lucide) lucide.createIcons();
+  }
+
+  /* =========================================================
+     FAQ
+  ========================================================= */
+  const FAQ_ITEMS = [
+    {
+      q: "¿Qué diferencia tienen las habitaciones Premium?",
+      a: "Las habitaciones Premium son unidades totalmente remodeladas a nuevo, más amplias y equipadas con jacuzzi, Smart TV de alta definición y aire acondicionado frío/calor.",
+    },
+    {
+      q: "¿Se puede reservar con anticipación?",
+      a: "No, la atención es exclusivamente por orden de llegada. Puedes consultar disponibilidad inmediata por WhatsApp antes de salir.",
+    },
+    {
+      q: "¿Pueden ingresar más de 2 personas?",
+      a: "No, las habitaciones son exclusivas para dos (2) personas sin excepción.",
+    },
+    {
+      q: "¿Se puede ingresar caminando o en moto?",
+      a: "Sí. Puedes entrar a pie de forma totalmente discreta por el acceso peatonal. Para motos, contamos con estacionamiento techado sin cargo.",
+    },
+    {
+      q: "¿Abren feriados, Navidad y Año Nuevo?",
+      a: "Sí, atendemos las 24 hs los 365 días del año de corrido, incluyendo feriados, fines de semana largos y fiestas de fin de año.",
+    },
+    {
+      q: "¿Qué medios de pago aceptan?",
+      a: "Efectivo, tarjetas de débito, tarjetas de crédito y pagos mediante transferencia / código QR.",
+    },
+  ];
+
+  function renderFAQ() {
+    const container = document.getElementById("faq-accordion");
+    container.innerHTML = FAQ_ITEMS.map(
+      (item, i) => `
+      <div class="card-surface overflow-hidden">
+        <button type="button" class="faq-toggle w-full flex items-center justify-between gap-3 text-left px-5 py-4" data-index="${i}" aria-expanded="false">
+          <span class="text-sm font-semibold txt-heading">${item.q}</span>
+          <i data-lucide="chevron-down" class="faq-chevron w-4 h-4 txt-accent shrink-0"></i>
+        </button>
+        <div class="faq-panel px-5" style="max-height:0; opacity:0;">
+          <p class="text-sm txt-secondary leading-relaxed pb-4">${item.a}</p>
+        </div>
+      </div>`
+    ).join("");
+
+    container.addEventListener("click", (e) => {
+      const btn = e.target.closest(".faq-toggle");
+      if (!btn) return;
+      const panel = btn.nextElementSibling;
+      const chevron = btn.querySelector(".faq-chevron");
+      const isOpen = btn.getAttribute("aria-expanded") === "true";
+
+      if (isOpen) {
+        btn.setAttribute("aria-expanded", "false");
+        panel.style.maxHeight = "0px";
+        panel.style.opacity = "0";
+        chevron.style.transform = "rotate(0deg)";
+      } else {
+        btn.setAttribute("aria-expanded", "true");
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        panel.style.opacity = "1";
+        chevron.style.transform = "rotate(180deg)";
+      }
+    });
+
+    if (window.lucide) lucide.createIcons();
+  }
+
+  /* =========================================================
+     LINKS GLOBALES (WhatsApp / Instagram / Maps)
+  ========================================================= */
+  function initGlobalLinks() {
+    const genericMsg = "Hola! Quiero consultar disponibilidad ahora en GEA Suites.";
+    const genericWaLink = buildWaLink(genericMsg);
+
+    ["header-wa-btn", "hero-wa-btn", "footer-wa-btn", "fab-wa-btn"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.href = genericWaLink;
+    });
+
+    ["header-ig-btn", "contact-ig-btn", "footer-ig-btn"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.href = INSTAGRAM_URL;
+    });
+
+    const encodedAddress = encodeURIComponent(HOTEL_ADDRESS);
+    document.getElementById("maps-btn").href = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+  }
+
+  /* =========================================================
+     INIT
+  ========================================================= */
+  document.addEventListener("DOMContentLoaded", () => {
+    initRooms();
+    renderFAQ();
+    initGlobalLinks();
+    document.getElementById("year").textContent = new Date().getFullYear();
+    if (window.lucide) lucide.createIcons();
+  });
+</script>
+
+</body>
+</html>
