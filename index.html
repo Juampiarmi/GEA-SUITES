@@ -163,30 +163,37 @@
 
   /* Visible natively by default — the reveal animation only kicks in once JS has
      confirmed it can run (html.js-anim, set synchronously at the top of <body>).
-     If a script fails or is slow, content simply stays visible instead of stuck hidden. */
+     If a script fails or is slow, content simply stays visible instead of stuck hidden.
+     transform+opacity only (no layout properties) so mobile Safari/Chrome can run this
+     on the compositor thread at 60fps. */
   .fade-up { opacity: 1; transform: none; }
   html.js-anim .fade-up {
     opacity: 0;
-    transform: translateY(10px);
-    transition: opacity .45s cubic-bezier(.16,.8,.24,1), transform .45s cubic-bezier(.16,.8,.24,1);
+    transform: translateY(16px);
+    will-change: opacity, transform;
+    transition: opacity .55s cubic-bezier(.16,.8,.24,1), transform .55s cubic-bezier(.16,.8,.24,1);
   }
-  html.js-anim .fade-up.in-view { opacity: 1; transform: translateY(0); }
+  html.js-anim .fade-up.in-view {
+    opacity: 1;
+    transform: translateY(0);
+    will-change: auto;
+  }
 
   /* The Hero is the first thing painted — it animates via pure CSS (no JS, no
      IntersectionObserver wait) so it can never flash invisible while a script loads. */
   @keyframes heroReveal {
-    from { opacity: 0; transform: translateY(14px); }
+    from { opacity: 0; transform: translateY(16px); }
     to { opacity: 1; transform: translateY(0); }
   }
   .hero-reveal { animation: heroReveal .8s cubic-bezier(.16,.8,.24,1) both; }
 
-  /* Staggered reveal for card grids — small, capped delays, never a long wait. */
-  .stagger > *:nth-child(1) { transition-delay: .03s; }
-  .stagger > *:nth-child(2) { transition-delay: .08s; }
-  .stagger > *:nth-child(3) { transition-delay: .13s; }
-  .stagger > *:nth-child(4) { transition-delay: .18s; }
-  .stagger > *:nth-child(5) { transition-delay: .23s; }
-  .stagger > *:nth-child(6) { transition-delay: .28s; }
+  /* Staggered, choreographed reveal for card grids — 80ms between each card. */
+  .stagger > *:nth-child(1) { transition-delay: 0ms; }
+  .stagger > *:nth-child(2) { transition-delay: 80ms; }
+  .stagger > *:nth-child(3) { transition-delay: 160ms; }
+  .stagger > *:nth-child(4) { transition-delay: 240ms; }
+  .stagger > *:nth-child(5) { transition-delay: 320ms; }
+  .stagger > *:nth-child(6) { transition-delay: 400ms; }
 
   .card-suite {
     transition: transform .5s cubic-bezier(.16,.8,.24,1), border-color .5s ease, box-shadow .5s ease;
@@ -294,6 +301,8 @@
       </a>
     </div>
 
+    <p class="max-w-md mx-auto text-[11px] text-sand/55 tracking-wide leading-relaxed italic mb-10">Atención 100% por orden de llegada. La disponibilidad informada por WhatsApp es en tiempo real al momento de la consulta, pero no constituye reserva de suite.</p>
+
     <div class="flex flex-wrap items-center justify-center gap-3">
       <span class="pill"><i data-lucide="footprints" class="w-3.5 h-3.5 text-amber"></i> Ingreso peatonal discreto</span>
       <span class="pill"><i data-lucide="bike" class="w-3.5 h-3.5 text-amber"></i> Estacionamiento motos techado sin cargo</span>
@@ -333,9 +342,9 @@
             <h3 class="font-serif text-lg tracking-wide">Cafetería 24hs</h3>
           </div>
           <ul class="space-y-2 text-sm text-sand/85">
-            <li class="menu-item">Café, té &amp; infusiones</li>
-            <li class="menu-item">Chocolatada &amp; capuccino</li>
-            <li class="menu-item">Agua mineral con / sin gas</li>
+            <li class="menu-item">Café</li>
+            <li class="menu-item">Café con leche</li>
+            <li class="menu-item">Té</li>
           </ul>
         </div>
 
@@ -394,7 +403,7 @@
           <i data-lucide="footprints" class="w-6 h-6"></i>
         </div>
         <h3 class="font-serif text-xl mb-2">Peatonal Discreto</h3>
-        <p class="text-sand/85 text-sm leading-relaxed">Ingreso independiente sin cruces con otros huéspedes ni personal.</p>
+        <p class="text-sand/85 text-sm leading-relaxed">Acceso peatonal habilitado, directo y discreto.</p>
       </div>
       <div class="glass rounded-2xl p-8 text-center fade-up">
         <div class="w-14 h-14 mx-auto rounded-full flex items-center justify-center badge-premium mb-5">
@@ -497,6 +506,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-amber"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg> Instagram
         </a>
       </div>
+      <p class="max-w-md mx-auto text-[11px] text-sand/55 tracking-wide leading-relaxed italic mt-6">Atención 100% por orden de llegada. La disponibilidad informada por WhatsApp es en tiempo real al momento de la consulta, pero no constituye reserva de suite.</p>
     </div>
 
     <div class="divider-glow mb-8"></div>
@@ -659,7 +669,7 @@
         <a href="#" target="_blank" rel="noopener" class="wa-reserve btn-primary rounded-full w-full py-3.5 text-xs tracking-wide text-white flex items-center justify-center gap-2">
           <i data-lucide="message-circle" class="w-4 h-4"></i> Consultar por WhatsApp
         </a>
-        <p class="text-center text-[10px] text-sand/65 tracking-wide mt-2.5">Atención 24hs por orden de llegada · Consultá disponibilidad en vivo</p>
+        <p class="text-center text-[10px] text-sand/60 tracking-wide leading-relaxed mt-2.5 italic">Atención 100% por orden de llegada. La disponibilidad informada por WhatsApp es en tiempo real al momento de la consulta, pero no constituye reserva de suite.</p>
       </div>
     </div>`;
   }
@@ -809,7 +819,7 @@
   }
 
   /* ========= FADE-UP OBSERVER ========= */
-  /* rootMargin extends the trigger zone 200px below the viewport, so cards finish
+  /* rootMargin extends the trigger zone 250px below the viewport, so cards finish
      revealing before the user actually scrolls to them — no pop-in, no jump. */
   function initFadeUp() {
     const els = document.querySelectorAll(".fade-up");
@@ -820,7 +830,7 @@
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0, rootMargin: "0px 0px 200px 0px" });
+    }, { threshold: 0, rootMargin: "0px 0px 250px 0px" });
     els.forEach(el => io.observe(el));
   }
 
